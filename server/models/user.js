@@ -9,37 +9,19 @@ var bcrypt = require('bcrypt-nodejs');
 autoIncrement.initialize(mongo);
 
 var UserSchema = new Schema({
-    role: {
-        type: String
-    },
     name: {
         type: String
     },
     email: {
         type: String
     },
-    alterEmail: {
-        type: String
-    },
-    phone: {
-        type: String
-    },
     password: {
         type: String
-    },
-    internalNote: {
-        type: String
-    },
-    createdBy: {
-        type: Number
-    },
-    detail: {
-        type: {}
-    },
-
+    }
 }, {
     timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' },
 });
+
 UserSchema.pre('save', function(next) {
     var user = this;
     if (this.isModified('password') || this.isNew) {

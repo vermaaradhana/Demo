@@ -4,21 +4,10 @@ const jwt = require('jsonwebtoken');
 
 // const authRoutes = require("./auth");
 const user = require("./user");
-const order = require("./order");
-const question = require("./question");
-const reference = require("./reference");
-const token = require("./tokenValidate");
-const mail = require("./mailSender");
-const job = require('./job');
-const price = require('./price');
+const blog = require('./blog');
 
 app.use("/user", user);
-app.use("/order", authenticateToken, order);
-app.use("/question", authenticateToken, question);
-app.use("/reference", authenticateToken, reference);
-app.use("/job", authenticateToken, job);
-app.use("/mail",authenticateToken, mail);
-app.use("/price",authenticateToken, price);
+app.use("/blog", blog);
 
 async function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization']

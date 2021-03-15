@@ -5,17 +5,10 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt-nodejs');
 
-router.post('/create', authenticateToken, createUser);
+router.post('/create', createUser);
 router.post('/login', Login);
-router.patch('/changepassword/:id', ChangePassword);
-router.delete('/delete/:id', authenticateToken, Delete);
-router.patch('/update/:id', authenticateToken, Update);
 router.post('/', authenticateToken, GetAllRecord);
 router.get('/userById/:id', authenticateToken, getUserById);
-router.post('/sortbypreference', authenticateToken, GetlinguistBypreferenceId);
-router.patch('/updatepreference', authenticateToken, Updatepreferenceid);
-router.post('/validateEmail', checkValidEmail);
-router.post('/preferenceNumberCheck', preferenceNumbercheck);
 
 async function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
@@ -34,15 +27,9 @@ async function createUser(req, res) {
     try {
 
         const user = new User({
-            role: req.body.role,
             name: req.body.name,
             email: req.body.email,
-            alterEmail: req.body.alterEmail,
-            phone: req.body.phone,
             password: req.body.password,
-            internalNote: req.body.internalNote,
-            createdBy: req.user.id,
-            detail: req.body.detail,
         });
         user.save((err, result) => {
             if (err) throw err;

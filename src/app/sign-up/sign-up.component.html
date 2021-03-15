@@ -1,0 +1,31 @@
+<div class="bb_auth_wrap">
+    <div class="bb_auth_wrap_inner">
+        <a class="bb_header_logo"><img src="assets/images/blogger.png" alt="Logo" style="width: 100px;height:100px;"></a>
+        <h4 class="bb_auth_heading">Sign Up</h4>
+        <form [formGroup]="Form" (ngSubmit)="onSubmit()">
+            <label>your name</label>
+            <input type="text" formControlName="username">
+            <div *ngIf="submitted && f.username.errors" class="ttg_required_upper">
+                <p class="required"*ngIf="submitted && f.username.errors.required" >Username is required</p>
+            </div>
+            <label>your email</label>
+            <input type="text" formControlName="email" class="ttg_required_upper" pattern="([\w\.\+]{1,})([^\W])(@)([\w]{1,})(\.[\w]{2,})">
+            <div *ngIf="submitted && f.email.errors" class="ttg_required_upper">
+                <p class="required"*ngIf="submitted && f.email.errors.required" >Email is required</p>
+                <p class="required"*ngIf="submitted && f.email.errors.pattern" >Enter a valid email is required</p>
+            </div>
+            <label>password</label>
+            <input type="password" formControlName="password">
+            <div *ngIf="submitted && f.password.errors" class="ttg_required_upper">
+                <p class="required"*ngIf="submitted && f.password.errors.required" >Password is required</p>
+            </div>
+            <label>confirm password</label>
+            <input type="password" formControlName="confirmPassword">
+            <div *ngIf="submitted && f.confirmPassword.errors" class="ttg_required_upper">
+                <p class="required"*ngIf="submitted && f.confirmPassword.errors.required" >Confirm Password is required</p>
+            </div>
+            <button class="bb_btn">Sign Up</button>
+            <p>Already have an account ? <a routerLink="/login">Sign In</a></p>
+        </form>
+    </div>
+</div>
