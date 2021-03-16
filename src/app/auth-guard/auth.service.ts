@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +10,6 @@ export class AuthService {
   constructor(
     private router: Router,
     public jwtHelper: JwtHelperService,
-    private http: HttpClient
   ) { }
 
   logout() {
@@ -21,17 +19,12 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    // const token = localStorage.getItem('token');
-    // Check whether the token is expired and return
-    // true or false
-    // return !this.jwtHelper.isTokenExpired(token);
-    return true;
+    const token:any= localStorage.getItem('token');
+    return !this.jwtHelper.isTokenExpired(token);
   }
   
   getUser() {
-    const token = localStorage.getItem('token');
-    // return this.jwtHelper.decodeToken(token);
-    // return JSON.parse(localStorage.getItem('profile'))
-    return true;
+    const token:any = localStorage.getItem('token');
+    return this.jwtHelper.decodeToken(token);
   }
 }

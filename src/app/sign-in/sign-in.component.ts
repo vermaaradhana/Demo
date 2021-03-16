@@ -10,15 +10,16 @@ import { ServiceService } from '../service/service.service';
 })
 export class SignInComponent implements OnInit {
 
- 
+
   Form: FormGroup;
   submitted: boolean = false;
+  errMessage: string='';
 
   constructor(
     private fb: FormBuilder,
-    private _service:ServiceService,
-    private router:Router
-  ) { 
+    private _service: ServiceService,
+    private router: Router
+  ) {
     this.Form = this.fb.group({
       email: ['', Validators.required],
       password: ['', Validators.required],
@@ -32,14 +33,20 @@ export class SignInComponent implements OnInit {
     return this.Form.controls
   }
 
-  onSubmit(){
-    this.submitted=true;
-    if(this.Form.invalid){
+  onSubmit() {
+    this.submitted = true;
+    if (this.Form.invalid) {
       return;
     }
-    this._service.login(this.Form.value).subscribe(res=>{
-    console.log(res);
-    this.router.navigate(['/home'])
+    this._service.login(this.Form.value).subscribe((res) => {
+      let data = res['data'];
+      let token = res['token'];
+      localStorage.setItem('profile', (JSON.stringify(data)));
+      localStorage.setItem('token', token);
+      this.submitted = false;
+      this.router.navigate(['/home']);
+    }, err => {
+      this.errMessage=err.error.message
     });
   }
 }

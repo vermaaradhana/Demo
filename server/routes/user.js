@@ -27,7 +27,7 @@ async function createUser(req, res) {
     try {
 
         const user = new User({
-            name: req.body.name,
+            username: req.body.username,
             email: req.body.email,
             password: req.body.password,
         });
@@ -48,7 +48,7 @@ async function Login(req, res) {
             bcrypt.compare(req.body.password, data[0].password, function(err, isMatch) {
                 if (err) throw err;
                 if (isMatch) {
-                    let info = { "id": data[0]._id, "name": data[0].name, "role": data[0].role, "email": data[0].email,"language":data[0].detail?data[0].detail.primaryLanguage:'' }
+                    let info = { "id": data[0]._id, "username": data[0].username, "email": data[0].email}
                     var token = jwt.sign(info, 'secret', { expiresIn: 86400 });
                     res.status(201).send({ success: true, data: info, token: 'JWT ' + token });
                 } else {

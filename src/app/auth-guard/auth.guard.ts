@@ -1,32 +1,41 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { AuthService } from './auth.service';
+import { Location } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return true;
+  constructor(
+    private router: Router,
+    private _auth: AuthService,
+    private location: Location,
+  ) {
+    this.location = location
   }
-  
-  // checkUserLogin(next: ActivatedRouteSnapshot, url: any): boolean {
-  //   let user=JSON.parse(localStorage.getItem('profile'));
-  //   let token=localStorage.getItem('token')
-  //   if (this._authService.isAuthenticated()) {
-  //     // if(token){
-  //     if(next.data.role.includes(user.role)){
-  //       return true;   
-  //     }
-  //     this.router.navigate(['login']);
-  //     return false;   
-  //   }
-  //   else{
-  //     this.router.navigate(['login']);
-  //     return false;
-  //   }
-  // }
+
+  canActivate(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    return this.checkUserLogin();
+  }
+
+  checkUserLogin(): boolean {
+    let token: any = localStorage.getItem('token');
+    if (token) {
+      if (this._auth.isAuthenticated()) {
+        return true;
+      }
+      else {
+        this.router.navigate(['login']);
+        return false;
+      }
+    }
+    else {
+      return false;
+    }
+  }
 
 }

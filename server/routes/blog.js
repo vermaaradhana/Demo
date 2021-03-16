@@ -27,8 +27,8 @@ var upload = multer({
 
 
 router.get('/', getReference);
-router.post('/create', upload.array('file',2), createReference);
-router.get('/edit/:id', editReference);
+router.post('/create', upload.array('file',2), create);
+router.get('/dataById/:id', dataById);
 router.patch('/update/:id', upload.single('fileName'), updateReference);
 router.delete('/delete/:id', deleteReference);
 
@@ -41,10 +41,6 @@ async function getReference(req, res) {
             res.status(201).send({ success: true, data: "No data to show" });
         } else {
             // const url = req.protocol + ':' + req.get('host') + '/upload/';
-            const url = req.protocol + '/upload/';
-            record.map(element => {
-                element.filePath = url + element.fileName;
-            })
             res.status(201).send({ success: true, data: record });
         }
     } catch (error) {
@@ -52,15 +48,14 @@ async function getReference(req, res) {
     }
 }
 
-async function createReference(req, res) {
+async function create(req, res) {
     try {
-        console.log(req)
         let payload = req.body;
         const url = req.protocol + ':'
         let data = new Reference({
             comment: payload.comment,
-            fileName: req.file.filename,
-            // createdBy: req.user.id
+            fileName: req.files[0].filename,
+            createdBy: req.user.id
         })
         data.save().then(result => {
             res.status(201).send({ success: true, message: "created successfully" });
@@ -72,7 +67,7 @@ async function createReference(req, res) {
     }
 }
 
-async function editReference(req, res) {
+async function dataById(req, res) {
     try {
         let record = await Reference.find({ "_id": req.params.id }).exec();
         if (record.length == 0) {

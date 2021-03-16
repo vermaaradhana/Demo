@@ -7,20 +7,19 @@ const mongo = mongoose.createConnection(connection.database)
 
 autoIncrement.initialize(mongo);
 
-var PriceSchema = new Schema({
-    minName: {
+var replySchema = new Schema({
+    blogId: {
         type: Number
     },
-    maxName: {
+    commentBy: {
         type: Number
     },
-    linguist: {
-        type: Number
-    },
-    price: {
-        type: Number
+    msg: {
+        type: String
     }
+}, {
+    timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' },
 });
 
-PriceSchema.plugin(autoIncrement.plugin, { model: 'disasterPrice', startAt: 1 });
-module.exports = mongoose.model('disasterPrice', PriceSchema, 'disasterPrice');
+replySchema.plugin(autoIncrement.plugin, { model: 'reply', startAt: 1 });
+module.exports = mongoose.model('reply', replySchema, 'reply');

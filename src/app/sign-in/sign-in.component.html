@@ -6,14 +6,15 @@
             <label> email</label>
             <input type="text" formControlName="email">
             <div *ngIf="submitted && f.email.errors" class="ttg_required_upper">
-                <p class="required"*ngIf="submitted && f.email.errors.required" >Email is required</p>
-                <p class="required"*ngIf="submitted && f.email.errors.pattern" >Enter a valid email is required</p>
+                <span class="required"*ngIf="submitted && f.email.errors.required" >Email is required</span>
+                <span class="required"*ngIf="submitted && f.email.errors.pattern" >Enter a valid email is required</span>
             </div>
             <label>password</label>
             <input type="password" formControlName="password">
             <div *ngIf="submitted && f.password.errors" class="ttg_required_upper">
-                <p class="required"*ngIf="submitted && f.password.errors.required" >Password is required</p>
+                <span class="required"*ngIf="submitted && f.password.errors.required" >Password is required</span>
             </div>
+            <span class="required" *ngIf="errMessage">{{errMessage}}</span>
             <button class="bb_btn">Sign In</button>
             <p>Don't have account ? <a routerLink="/signup">Sign Up</a></p>
         </form>

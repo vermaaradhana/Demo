@@ -19,7 +19,7 @@ body {
     font-size: 11px !important;
     width: 100%;
     text-align: right;
-    margin: 0;
+    margin: -15px 0 0 0;
     padding: 0 !important;
     background-color: transparent !important;
 }
@@ -62,8 +62,8 @@ a, button{
 }
 /*---------- Button CSS Start ----------*/
 .bb_btn{
-    min-width: 140px;
-    height: 50px;
+    min-width: 120px;
+    height: 45px;
     border: 2px solid #2196f3;
     display: -webkit-box;
     display: -moz-box;
@@ -76,14 +76,14 @@ a, button{
     -ms-flex-align: center;
     -webkit-align-items: center;
     align-items: center;
-    padding: 0px 20px;
+    padding: 0px 15px;
     text-transform: capitalize;
     color: #ffffff;
     background-color: #2196f3;
-    border-radius: 100px;
+    border-radius: 4px;
     font-weight: 600;
     letter-spacing: 0.5px;
-    font-size: 18px;
+    font-size: 16px;
 }
 .bb_btn:hover, .bb_btn:focus{
     background-color: #ffffff;
@@ -99,6 +99,7 @@ a, button{
     background-color: #ffffff;
     padding: 8px 65px 0px 65px;
     position: relative;
+    border-bottom: 1px solid #e1e1e1;
     z-index: 2;
 }
 .bb_header_top{
@@ -119,7 +120,9 @@ a, button{
     fill: #2196f3;
 }
 .bb_header_logo{}
-.bb_header_logo img{}
+.bb_header_logo img{
+    height: 70px;
+}
 .bb_header_optns_box{
     margin: 0;
     padding: 0;
@@ -240,6 +243,7 @@ a, button{
     flex-wrap: wrap;
     margin-left: -15px;
     margin-right: -15px;
+    width: 100%;
 }
 .bb_news_wrap ul li{
     list-style: none;
@@ -256,11 +260,17 @@ a, button{
     position: relative;
     width: 100%;
 }
+.bb_news_box>a{
+    width: 100%;
+    display: flex;
+    height: 180px;
+    justify-content: center;
+}
 .bb_news_details .bb_news_box {
     box-shadow: none;
     border-radius: 0;
     margin-bottom: 0px;
-    width: calc(100% - 350px);
+    width: 100%;
 }
 .bb_news_details .bb_news_box img {
     object-fit: none;
@@ -318,15 +328,15 @@ a, button{
     color: #ffffff;
     padding: 5px 15px;
     border-radius: 4px;
+    height: 36px;
 }
 .bb_news_box span a{
     color: #ffffff;
 }
 .bb_news_box img{
     border-radius: 4px 4px 0px 0px;
-    object-fit: cover;
-    height: 250px;
-    width: 100%;
+    object-fit: contain;
+    height: 100%;
 }
 .bb_news_box h4{
     margin: 10px 15px;
@@ -367,6 +377,15 @@ a, button{
     box-shadow: none;
     resize: none;
 	border: 1px solid #e1e1e1;
+}
+.bb_blog_messages input[type="file" i] {
+    padding-top: 9px;
+    cursor: pointer;
+}
+.preview img{
+    height: 70px;
+    margin-top: -20px;
+    margin-bottom: 15px;
 }
 .bb_blog_messages textarea{
     padding: 10px 15px;

@@ -5,9 +5,11 @@ const jwt = require('jsonwebtoken');
 // const authRoutes = require("./auth");
 const user = require("./user");
 const blog = require('./blog');
+const reply = require('./reply');
 
 app.use("/user", user);
-app.use("/blog", blog);
+app.use("/blog",authenticateToken, blog);
+app.use("/reply",authenticateToken, reply);
 
 async function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization']

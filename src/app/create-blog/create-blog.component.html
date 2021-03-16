@@ -1,13 +1,13 @@
 <div class="bb_main_wrap">
     <div class="bb_header">
         <div class="bb_header_top">
-            <a class="bb_header_logo"><img src="assets/images/blogger.png" alt="Logo" style="width: 100px;height:100px;"></a>
+            <a class="bb_header_logo"><img src="assets/images/blogger.png" alt="Logo"></a>
             <ul class="bb_header_optns_box bb_rightside">
                 <li>
                     <span><img src="assets/images/default_small.jpg" alt="User"></span>
                     <div class="bb_user_profile">
                         <ul>
-                            <li><a href="javascript:;">logout</a></li>
+                            <li><a href="javascript:;" (click)="logout()">logout</a></li>
                         </ul>
                     </div>
                 </li>
@@ -18,36 +18,21 @@
     <div class="bb_news_wrap">
         <div class="bb_news_wrap_inner">
             <ul>
+                <li></li>
                 <li>
-                    <div class="bb_news_box">
+                    <div class="bb_news_box bb_blog_messages">
                         <form [formGroup]="Form" (ngSubmit)="onSubmit()">
-                        <br>
-                        <input type="file" (change)="uploadFile($event)">
-                        <div class="preview" *ngIf="preview && preview !== null">
-                            <img [src]="preview" style="width: 200px;height: 200px;">
-                        </div>
-                        <textarea formControlName="comment"></textarea>
-                        <br>
-                        <button>Post</button>
+                            <label><b>Create Your Blog</b></label>
+                            <input type="file" (change)="uploadFile($event)" name="file">
+                            <div class="preview" *ngIf="preview && preview !== null">
+                                <img [src]="preview">
+                            </div>
+                            <textarea formControlName="comment"></textarea>
+                            <button class="bb_btn">Post</button>
                         </form>
                     </div>
                 </li>
-                <li>
-                    <div class="bb_news_box">
-                        <span class="bb_blogdate"><a href="news_details.html">Jun, 26 2018</a></span>
-                        <a href="news_details.html"><img src="assets/images/blog2.jpg" alt="Blog"></a>
-                        <h4><a href="news_details.html">Farm Gate Bio-Security Boot Brush</a></h4>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever</p>
-                    </div>
-                </li>
-                <li>
-                    <div class="bb_news_box">
-                        <span class="bb_blogdate"><a href="news_details.html">Jun, 24 2018</a></span>
-                        <a href="news_details.html"><img src="assets/images/blog3.jpg" alt="Blog"></a>
-                        <h4><a href="news_details.html">NHS Hardware show Las Vegas 2018</a></h4>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever</p>
-                    </div>
-                </li>
+                <li></li>
             </ul>
         </div>
     </div>

@@ -1,30 +1,25 @@
 var express = require('express');
 var router = express.Router();
-var moment = require('moment');
-const Price = require('../models/disasterPrice');
+const Reply = require('../models/reply');
 
 
 
-router.post('/', getPrice);
-router.post('/create', createPrice);
-router.get('/edit/:id', editPrice);
-router.patch('/update/:id', updatePrice);
-router.delete('/delete/:id', deletePrice);
+router.post('/', getReply);
+router.post('/create', createReply);
+router.get('/edit/:id', editReply);
+router.patch('/update/:id', updateReply);
+router.delete('/delete/:id', deleteReply);
 
 
 
-async function getPrice(req, res) {
+async function getReply(req, res) {
     try {
         let payload=req.body
-        let record = await Price.find({$and:[{"linguist":payload.linguist},{"minName":{$lte:payload.name}},{"maxName":{$gte:payload.name}}]}).sort({ "_id": -1 }).exec();
+        let record = await Reply.aggregate([{ $match: { "blogId": payload.id } }, { $lookup: { from: 'user', localField: 'commentBy', foreignField: '_id', as: 'userData' } },  { "$addFields": { 'username': '$userData.username' } }, { $project: { 'userData': 0 } }]).exec();
+        // let record = await Reply.find({"blogId":payload.id}).sort({ "_id": -1 }).exec();
         if (record.length == 0) {
             res.status(201).send({ success: true, data: "No data to show" });
         } else {
-            // const url = req.protocol + ':' + req.get('host') + '/upload/';
-            const url = req.protocol + '/upload/';
-            record.map(element => {
-                element.filePath = url + element.fileName;
-            })
             res.status(201).send({ success: true, data: record });
         }
     } catch (error) {
@@ -32,16 +27,14 @@ async function getPrice(req, res) {
     }
 }
 
-async function createPrice(req, res) {
+async function createReply(req, res) {
     try {
         let payload = req.body;
         const url = req.protocol + ':'
-        let data = new Price({
-            minName: payload.minName,
-            maxName: payload.maxName,
-            linguist: payload.linguist,
-            price:payload.price,
-            createdBy: req.user.id
+        let data = new Reply({
+            blogId: payload.blogId,
+            msg: payload.msg,
+            commentBy: req.user.id
         })
         data.save().then(result => {
             res.status(201).send({ success: true, message: "created successfully" });
@@ -53,9 +46,9 @@ async function createPrice(req, res) {
     }
 }
 
-async function editPrice(req, res) {
+async function editReply(req, res) {
     try {
-        let record = await Price.find({ "_id": req.params.id }).exec();
+        let record = await Reply.find({ "_id": req.params.id }).exec();
         if (record.length == 0) {
             res.status(201).send({ success: true, data: "No data to show" });
         } else {
@@ -66,7 +59,7 @@ async function editPrice(req, res) {
     }
 }
 
-async function updatePrice(req, res) {
+async function updateReply(req, res) {
     try {
         let payload = req.body;
         const url = req.protocol + ':' + req.get('host') + '/upload/';
@@ -80,16 +73,16 @@ async function updatePrice(req, res) {
         if (req.file) {
             data.fileName = req.file.filename;
         }
-        await Price.findByIdAndUpdate({ "_id": req.params.id }, { $set: data }).exec();
+        await Reply.findByIdAndUpdate({ "_id": req.params.id }, { $set: data }).exec();
         res.status(201).send({ success: true, data: "Updated Successfully" });
     } catch (error) {
         res.status(500).send({ success: false, message: error.message });
     }
 }
 
-async function deletePrice(req, res) {
+async function deleteReply(req, res) {
     try {
-        await Price.findByIdAndDelete({ "_id": req.params.id }).exec();
+        await Reply.findByIdAndDelete({ "_id": req.params.id }).exec();
         res.status(201).send({ success: true, data: "Deleted Successfully" });
     } catch (error) {
         res.status(500).send({ success: false, message: error.message });
