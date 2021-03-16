@@ -17,13 +17,13 @@ const routes: Routes = [
     path: 'signup', component: SignUpComponent
   },
   {
-    path: 'home', component: HomeComponent
+    path: 'home', component: HomeComponent,canActivate: [AuthGuard]
   },
   {
     path: 'blog-detail/:id', component: BlogDetailComponent, canActivate: [AuthGuard],
   },
   {
-    path: 'create-blog', component: CreateBlogComponent
+    path: 'create-blog', component: CreateBlogComponent,canActivate: [AuthGuard]
   }
 ];
 
