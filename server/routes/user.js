@@ -25,7 +25,6 @@ async function authenticateToken(req, res, next) {
 
 async function createUser(req, res) {
     try {
-
         const user = new User({
             username: req.body.username,
             email: req.body.email,
@@ -45,10 +44,10 @@ async function Login(req, res) {
     try {
         let data = await User.find({ "email": req.body.email }).exec();
         if (data.length != 0) {
-            bcrypt.compare(req.body.password, data[0].password, function(err, isMatch) {
+            bcrypt.compare(req.body.password, data[0].password, function (err, isMatch) {
                 if (err) throw err;
                 if (isMatch) {
-                    let info = { "id": data[0]._id, "username": data[0].username, "email": data[0].email}
+                    let info = { "id": data[0]._id, "username": data[0].username, "email": data[0].email }
                     var token = jwt.sign(info, 'secret', { expiresIn: 86400 });
                     res.status(201).send({ success: true, data: info, token: 'JWT ' + token });
                 } else {
@@ -69,12 +68,12 @@ async function ChangePassword(req, res) {
         let payload = req.body;
         let data = await User.find({ "_id": req.params.id }).exec();
         if (data.length != 0) {
-            bcrypt.compare(req.body.oldPassword, data[0].password, async function(err, isMatch) {
+            bcrypt.compare(req.body.oldPassword, data[0].password, async function (err, isMatch) {
                 if (err) throw err;
                 if (isMatch) {
-                    await bcrypt.genSalt(10, function(err, salt) {
+                    await bcrypt.genSalt(10, function (err, salt) {
                         if (err) throw err;
-                        bcrypt.hash(payload.newPassword, salt, null, function(err, hash) {
+                        bcrypt.hash(payload.newPassword, salt, null, function (err, hash) {
                             if (err) throw err;
                             payload.newPassword = hash;
                         });
@@ -116,7 +115,7 @@ async function Update(req, res) {
 
 async function GetAllRecord(req, res) {
     try {
-        let record = await User.find({ "role": req.body.role }, { password: 0 }).exec();
+        let record = await User.find({}, { password: 0 }).exec();
         if (record.length == 0) {
             res.status(201).send({ success: true, data: "No data to show" });
         } else {
@@ -137,53 +136,6 @@ async function getUserById(req, res) {
         }
     } catch (error) {
         res.status(500).send({ success: false, message: error.message });
-    }
-}
-async function GetlinguistBypreferenceId(req, res) {
-    try {
-        let record = await User.find({ "role": "linguist", "detail.primaryLanguage": req.body.language }, { name: 1, 'detail.primaryLanguagePreferenceNumber': 1, email: 1 }).sort({ "detail.primaryLanguagePreferenceNumber": 1 }).exec();
-        if (record.length == 0) {
-            res.status(201).send({ success: true, data: "No data to show" });
-        } else
-            res.status(201).send({ success: true, data: record });
-    } catch (error) {
-        res.status(500).send({ success: false, message: error.message });
-    }
-}
-
-async function Updatepreferenceid(req, res) {
-    try {
-        let payload = req.body;
-        payload.forEach(async(value) => {
-            let result = await User.findByIdAndUpdate({ "_id": value._id }, { "detail.primaryLanguagePreferenceNumber": value.detail.primaryLanguagePreferenceNumber }).exec();
-        });
-        res.status(201).send({ success: true, data: "Updated successfully" });
-    } catch (error) {
-        res.status(500).send({ success: false, message: error.message });
-    }
-}
-
-async function checkValidEmail(req, res) {
-    try {
-        let payload = req.body;
-        let data = await User.find({ "email": req.body.email }, { name: 1, email: 1 }).exec();
-        if (data.length == 0) {
-            res.status(404).send({ message: "User Not found" });
-        } else {
-            res.status(201).send(data);
-        }
-    } catch (error) {
-        res.status(500).send({ success: false, message: error.message });
-    }
-}
-
-async function preferenceNumbercheck(req, res) {
-    try {
-        let data = await User.find({ $and: [{ "detail.primaryLanguagePreferenceNumber": { $exists: true, $eq: req.body.id } }, { "detail.primaryLanguage": req.body.primaryLanguage }] }).exec();
-        res.status(201).send(String(data.length));
-
-    } catch (error) {
-        res.status(500).send({ success: false, message: error.message })
     }
 }
 

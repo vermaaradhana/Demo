@@ -19,6 +19,9 @@ export class BlogDetailComponent implements OnInit {
   record: any = [];
   replyData: any = [];
   user: any;
+  activeRow: any;
+  msgData: any;
+  id: any;
 
   constructor(
     private _route: ActivatedRoute,
@@ -28,7 +31,7 @@ export class BlogDetailComponent implements OnInit {
     private _auth: AuthService,
   ) {
     this.Form = this.fb.group({
-      msg: ['',Validators.required],
+      msg: ['', Validators.required],
       blogId: [''],
     });
   }
@@ -57,13 +60,28 @@ export class BlogDetailComponent implements OnInit {
     this._auth.logout();
   }
 
-  reply() {
+  reply(i?: any, commentId?: any) {
+    this.id=commentId;
+    this.activeRow = i;
     if (this._auth.isAuthenticated()) {
-      if(this.Form.invalid){
+      if (this.Form.invalid) {
         return;
       }
       this._blog.createReply(this.Form.value).subscribe(res => {
         this._router.navigate(['home']);
+      })
+    } else {
+      this._router.navigate(['/login'])
+    }
+  }
+
+  enterMsg(e: any) {
+    this.msgData = e.target.value
+    if (this._auth.isAuthenticated()) {
+      this._blog.updateReply({authoreply:this.msgData},this.id).subscribe(res => {
+        this.id;
+        this.activeRow=-1;
+        this.ngOnInit();
       })
     } else {
       this._router.navigate(['/login'])

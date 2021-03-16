@@ -20,26 +20,33 @@
             <div class="bb_news_box">
                 <span class="bb_blogdate">Mar, 26 2020</span>
                 <!-- <img src="assets/images/brushe.jpg" alt="Blog"> -->
-                <img [src]="baseURL+'/'+record.fileName" alt="Blog" >
+                <img [src]="baseURL+'/'+record.fileName" alt="Blog">
                 <h4>Hygiene Colour Coded Range 2020</h4>
                 <p>{{record.comment}}</p>
                 <h4 class="bb_blog_heading" *ngIf="replyData.length>0">all comments</h4>
                 <h4 class="bb_blog_heading" *ngIf="replyData.length==0">Be first to comment</h4>
                 <div class="bb_blogrply">
                     <ul>
-						<li *ngFor="let data of replyData">
-							<div class="bb_blog_comment">
-								<div class="bb_comment_image">
-									<img src="assets/images/bloger_1.jpg" alt="">
-								</div>
-								<div class="bb_comment_text">
-									<h5 class="bb_bloger_name">{{data.username}}</h5>
-									<span class="bb_blog_date">{{data.createdAt | date}}</span>
-									<p class="bb_blog_post">{{data.msg}}</p>
-								</div>
-							</div>
-						</li>
-					</ul>
+                        <li *ngFor="let data of replyData; let i=index;">
+                            <div class="bb_blog_comment">
+                                <div class="bb_comment_image">
+                                    <img src="assets/images/bloger_1.jpg" alt="">
+                                </div>
+                                <div class="bb_comment_text">
+                                    <h5 class="bb_bloger_name">{{data.username}}</h5>
+                                    <span class="bb_blog_date">{{data.createdAt | date}}</span>
+                                    <p class="bb_blog_post">{{data.msg}}</p>
+                                </div>
+                            </div>
+                                <div class="bb_comment_text" *ngIf="data.authoreply" style="position: relative; text-align: right;">
+                                    <h5 class="bb_bloger_name">Author</h5>
+                                    <p class="bb_blog_post">{{data.authoreply}}</p>
+                                </div>
+                            <a href="javascript:;" style="color: #2196f3;position: right;"
+                                (click)="reply(i,data._id)" *ngIf="!data.authoreply && user.id===data.blogCreatedBy[0]">reply</a>
+                            <input *ngIf="activeRow==i" (change)="enterMsg($event)">
+                        </li>
+                    </ul>
                 </div>
                 <h4 class="bb_blog_heading">Leave a reply</h4>
                 <div class="bb_blog_messages">

@@ -38,7 +38,12 @@ export class BlogService {
   getReply(data:any): Observable<any> {
     return this.http.post(`${environment.apiUrl}/reply/`,data, this.httpOptions)
   }
+
   createReply(data:any): Observable<any> {
     return this.http.post(`${environment.apiUrl}/reply/create/`,data, this.httpOptions)
+  }
+
+  updateReply(data:any,id:any):Observable<any>{
+    return this.http.patch(`${environment.apiUrl}/reply/update/${id}`,data,this.httpOptions)
   }
 }

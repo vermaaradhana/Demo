@@ -16,7 +16,11 @@ var replySchema = new Schema({
     },
     msg: {
         type: String
+    },
+    authoreply: {
+        type: String
     }
+
 }, {
     timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' },
 });

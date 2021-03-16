@@ -15,8 +15,7 @@ router.delete('/delete/:id', deleteReply);
 async function getReply(req, res) {
     try {
         let payload=req.body
-        let record = await Reply.aggregate([{ $match: { "blogId": payload.id } }, { $lookup: { from: 'user', localField: 'commentBy', foreignField: '_id', as: 'userData' } },  { "$addFields": { 'username': '$userData.username' } }, { $project: { 'userData': 0 } }]).exec();
-        // let record = await Reply.find({"blogId":payload.id}).sort({ "_id": -1 }).exec();
+        let record = await Reply.aggregate([{ $match: { "blogId": payload.id } }, { $lookup: { from: 'user', localField: 'commentBy', foreignField: '_id', as: 'userData' } },  { "$addFields": { 'username': '$userData.username' } },{ $lookup: { from: 'blog', localField: 'blogId', foreignField: '_id', as: 'blogData' } }, { $project: { 'userData': 0 } },  { "$addFields": { 'blogCreatedBy': '$blogData.createdBy' } }]).exec();
         if (record.length == 0) {
             res.status(201).send({ success: true, data: "No data to show" });
         } else {
@@ -62,18 +61,7 @@ async function editReply(req, res) {
 async function updateReply(req, res) {
     try {
         let payload = req.body;
-        const url = req.protocol + ':' + req.get('host') + '/upload/';
-        let data = {};
-        if (payload.title) {
-            data.title = req.body.title
-        }
-        if (payload.description) {
-            data.description = req.body.description
-        }
-        if (req.file) {
-            data.fileName = req.file.filename;
-        }
-        await Reply.findByIdAndUpdate({ "_id": req.params.id }, { $set: data }).exec();
+        await Reply.findByIdAndUpdate({ "_id": req.params.id }, { $set: payload }).exec();
         res.status(201).send({ success: true, data: "Updated Successfully" });
     } catch (error) {
         res.status(500).send({ success: false, message: error.message });
