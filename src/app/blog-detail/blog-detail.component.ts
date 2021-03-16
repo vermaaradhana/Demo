@@ -28,7 +28,7 @@ export class BlogDetailComponent implements OnInit {
     private _auth: AuthService,
   ) {
     this.Form = this.fb.group({
-      msg: [''],
+      msg: ['',Validators.required],
       blogId: [''],
     });
   }
@@ -59,6 +59,9 @@ export class BlogDetailComponent implements OnInit {
 
   reply() {
     if (this._auth.isAuthenticated()) {
+      if(this.Form.invalid){
+        return;
+      }
       this._blog.createReply(this.Form.value).subscribe(res => {
         this._router.navigate(['home']);
       })
